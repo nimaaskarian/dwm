@@ -44,10 +44,12 @@ static const Rule rules[] = {
 	{ "Gimp",						NULL,       NULL,					0,            1,           -1 },
 	{ "firefox",				NULL,       NULL,					1<<1,         0,           -1 },
 	{ "Gimp",						NULL,       NULL,					0,            1,           -1 },
-	{ "Xournalpp",			NULL,       NULL,					0<<8,         0,           -1 },
+	{ "Xournalpp",			NULL,       NULL,					1<<8,         0,           -1 },
 	{ "Chromium",				NULL,       NULL,					1<<1,         0,           -1 },
+	{ "Zathura",				NULL,       NULL,					1<<6,         0,           -1 },
 	{ "st-256color",		NULL,       "st",					1,            0,           -1 },
 	{ "st-256color",		NULL,       "lvim",				1<<4,         0,           -1 },
+	{ "st-256color",		NULL,       "ranger",			1<<7,         0,           -1 },
 };
 /*}}}*/
 /* layout(s) {{{*/
@@ -83,47 +85,50 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 // static const char *termcmd[]  = { "kitty", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *rangercmd[]  = { "st","-e","ranger", NULL };
+static const char *warpdcmd[]  = { "warpd","--hint",";","killall","warpd", NULL };
 static const char *editorcmd[]  = { "st","-e","/home/nima/.local/bin/lvim", NULL };
 static const char *screenshotcmd[]  = { "flameshot","gui", NULL };
-
+static const char *powermenucmd[]  = { "/home/nima/Scripts/dmenu-powermenu.sh",norm_bg,norm_fg,sel_fg,sel_bg,dmenufont, NULL };
 static const Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ ALTKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ControlMask,           XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = editorcmd} },
-	{ MODKEY,                       XK_s,		   spawn,          {.v = screenshotcmd} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_p,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY|ShiftMask,             XK_e,			 spawn,        	 {.v = rangercmd} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	/* modifier                     key						 function        argument */
+	{ ALTKEY,                       XK_d,					 spawn,          {.v = dmenucmd } },
+	{ ALTKEY,                       XK_q,					 spawn,          {.v = powermenucmd } },
+	{ MODKEY,                       XK_Return,		 spawn,          {.v = termcmd } },
+	{ MODKEY|ControlMask,           XK_Return,		 zoom,           {0} },
+	{ MODKEY,                       XK_b,					 togglebar,      {0} },
+	{ MODKEY,                       XK_j,					 focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_k,					 focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_i,					 incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_d,					 incnmaster,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_h,					 setmfact,       {.f = -0.05} },
+	{ MODKEY|ShiftMask,             XK_l,					 setmfact,       {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_Return,		 spawn,          {.v = editorcmd} },
+	{ MODKEY,                       XK_s,					 spawn,          {.v = screenshotcmd} },
+	{ MODKEY,                       XK_Tab,				 view,           {0} },
+	{ MODKEY,                       XK_q,					 killclient,     {0} },
+	{ MODKEY,                       XK_t,					 setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_p,					 setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_f,					 setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_space,			 setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_space,			 togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_e,					 spawn,        	 {.v = rangercmd} },
+	{ MODKEY,                       XK_0,					 view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,					 tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_h,					 focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_l,					 focusmon,       {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_h,					 tagmon,         {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_h,					 spawn,          {.v = warpdcmd } },
+	{ MODKEY|ControlMask,           XK_l,					 tagmon,         {.i = +1 } },
+	TAGKEYS(                        XK_1,													 0)
+	TAGKEYS(                        XK_2,													 1)
+	TAGKEYS(                        XK_3,													 2)
+	TAGKEYS(                        XK_4,													 3)
+	TAGKEYS(                        XK_5,													 4)
+	TAGKEYS(                        XK_6,													 5)
+	TAGKEYS(                        XK_7,													 6)
+	TAGKEYS(                        XK_8,													 7)
+	TAGKEYS(                        XK_9,													 8)
+	{ MODKEY|ShiftMask,             XK_q,					 quit,           {0} },
 };
 /*}}}*/
 /* button definitions {{{*/
